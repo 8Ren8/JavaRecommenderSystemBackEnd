@@ -20,6 +20,7 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
+    //Generate jwt token for user during registration
     public AuthenticationResponse registerUser(RegisterRequest request) {
         var user = User.builder()
                 .username(request.getUsername())
@@ -36,6 +37,7 @@ public class AuthenticationService {
                 .build();
     }
 
+    //Authenticate user by generating jwt token for validated user
     public AuthenticationResponse authenticateUser(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

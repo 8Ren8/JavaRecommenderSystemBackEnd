@@ -20,9 +20,9 @@ public class SimilarMoviesDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<String> similarMovieList(int id) {
-        String column = "ID_" + id;
-        String sql = "SELECT MOVIE_ID FROM PEARSONS_CORRELATIONS_LARGE WHERE " + column + " > 0.8 AND MOVIE_ID != " + id;
+    public List<String> similarMovieList() {
+        //String column = "ID_" + id;
+        String sql = "SELECT MOVIE_ID FROM PEARSONS_CORRELATIONS_LARGE WHERE ID_110 > 0.5 AND MOVIE_ID != 110";
         List<String> listSimilarMovies = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(String.class));
         return listSimilarMovies;
     }

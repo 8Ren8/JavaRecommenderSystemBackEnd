@@ -28,7 +28,7 @@ public class SimilarMovieDAOTest {
     @Test
     void testSimilarMovieList() {
         int movieId = 110;
-        List<String> listSimilarMovies = similarMoviesDAO.similarMovieList(movieId);
+        List<String> listSimilarMovies = similarMoviesDAO.similarMovieList();
 
         assertFalse(listSimilarMovies.isEmpty());
     }

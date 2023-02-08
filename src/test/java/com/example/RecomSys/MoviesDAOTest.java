@@ -42,7 +42,7 @@ public class MoviesDAOTest {
 
     @Test
     void testSaveMovie() {
-        Movies movie = new Movies("Movie Test", "Comedy|Action", "Movie Test Description", "poster_url");
+        Movies movie = new Movies("Movie Test", "Comedy|Action", 0, "Movie Test Description", "poster_url");
         moviesDao.saveMovie(movie);
     }
 
