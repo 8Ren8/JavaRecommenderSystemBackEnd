@@ -27,11 +27,16 @@ public class SecurityConfig {
         {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**");
+                registry.addMapping("/**")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowCredentials(true)
+                        .allowedHeaders("*");
             }
         };
     }
 
+    //configure http security of application
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
@@ -42,6 +47,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/auth/**")
                 .permitAll()
+                .requestMatchers("/api/v1/users/**").hasAuthority("admin")
+                .requestMatchers("/api/v1/movies/addMovie").hasAuthority("admin")
                 .anyRequest()
                 .authenticated()
                 .and()

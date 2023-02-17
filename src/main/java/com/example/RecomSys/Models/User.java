@@ -42,16 +42,19 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    //returns a list of roles of user
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
     }
 
+    //returns username used to authenticate user
     @Override
     public String getUsername() {
         return username;
     }
 
+    //returns password used to authenticate user
     @Override
     public String getPassword() {
         return password;

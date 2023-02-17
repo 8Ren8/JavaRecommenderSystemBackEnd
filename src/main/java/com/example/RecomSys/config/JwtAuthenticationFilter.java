@@ -15,7 +15,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+//intercept the http login request, filter one request per time
 @Component
+//create constructor for final variables declared
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -28,32 +30,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //header that contains jwt token
         final String authHeader = request.getHeader("Authorization");
 
+        //jwt inside the header
         final String jwtToken;
+
 
         final String username;
 
+        //stop jwt auth filter and pass the request to next filter if jwt is missing
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        //jwt starts at index 7, because of "Bearer " in header
         jwtToken = authHeader.substring(7);
+
+        //store extracted username in the jwt
         username = jwtService.extractUsername(jwtToken);
 
+        //check user is authenticated or not, if not authenticated, proceed
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            //fetch user from database
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            //updates the security context if jwt is valid
             if (jwtService.isTokenValid(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
-
+                //build details based on http request
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
+                //updates security context holder
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-
+        //pass request to next filter
         filterChain.doFilter(request, response);
     }
 }

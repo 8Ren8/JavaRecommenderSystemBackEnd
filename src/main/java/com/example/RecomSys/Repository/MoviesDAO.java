@@ -32,7 +32,9 @@ public class MoviesDAO {
     //Get list of similar movies based on movie id from database
     public List<Movies> similarMovies(int id) {
         String column = "ID_" + id;
-        String sql = ("SELECT MOVIEID, TITLE, GENRES, TMDBID FROM FILTERED_MOVIES_MEDIUM_TMDBID M JOIN PEARSONS_CORRELATIONS_LARGE PCL ON M.MOVIEID = PCL.MOVIE_ID WHERE PCL." + column + " > 0.6 AND MOVIE_ID != " + id + " AND ROWNUM < 6");
+        String sql = ("SELECT MOVIEID, TITLE, GENRES, TMDBID FROM FILTERED_MOVIES_MEDIUM_TMDBID M " +
+                "JOIN PEARSONS_CORRELATIONS_LARGE PCL ON M.MOVIEID = PCL.MOVIE_ID " +
+                "WHERE PCL." + column + " > 0.6 AND MOVIE_ID != " + id + " AND ROWNUM < 6");
         List<Movies> listSimilarMovies = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Movies.class));
         return listSimilarMovies;
     }
@@ -40,7 +42,8 @@ public class MoviesDAO {
     // Save new movie data into database
     public Movies saveMovie(Movies movie) {
         SimpleJdbcInsert insertActor = new SimpleJdbcInsert(jdbcTemplate);
-        insertActor.withTableName("FILTERED_MOVIES_MEDIUM_TMDBID").usingColumns("title", "genres", "tmdbId", "description", "posterurl");
+        insertActor.withTableName("FILTERED_MOVIES_MEDIUM_TMDBID").usingColumns("title",
+                "genres", "tmdbId", "description", "poster_url");
 
         BeanPropertySqlParameterSource param = new BeanPropertySqlParameterSource(movie);
         insertActor.execute(param);
